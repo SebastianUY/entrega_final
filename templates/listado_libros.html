@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Libros{% endblock %}
+
+{% block content %}
+    <h1>Listado de libros</h1>
+
+    {% if libros %}
+        <ul>
+            {% for libro in libros %}
+                <li>{{ libro.titulo }} de {{ libro.autor }} ({{ libro.fecha_publicacion }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay libros registrados aún.</p>
+    {% endif %}
+
+    <a href="{% url 'crear_libro' %}">Agregar un nuevo libro</a>
+{% endblock %}
