@@ -1,32 +1,44 @@
-from django.shortcuts import render, redirect
-from .forms import FormularioCreacionLibro
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Libro
+from .forms import FormularioCreacionLibro
+
+def inicio(request):
+    """
+    Vista de inicio que renderiza la plantilla de bienvenida.
+    """
+    return render(request, 'inicio.html')
 
 def crear_libro(request):
-    """
-    Vista para manejar la creación de nuevos libros.
-    """
     mensaje_exito = ""
     formulario = FormularioCreacionLibro()
-
+    
     if request.method == "POST":
         formulario = FormularioCreacionLibro(request.POST)
         if formulario.is_valid():
             formulario.save()
-            mensaje_exito = "¡Libro agregado correctamente!"
-            # Redirecciona a la página de listado después de guardar.
-            return redirect('listado_libros') 
+            mensaje_exito = "¡Has creado un nuevo libro con éxito!"
+            formulario = FormularioCreacionLibro()
 
-    return render(request, 'crear_libro.html', {
-        'formulario': formulario, 
-        'mensaje_exito': mensaje_exito
-    })
+    return render(request, 'crear_libro.html', {'formulario': formulario, 'mensaje_exito': mensaje_exito})
 
 def listado_libros(request):
-    """
-    Vista para mostrar un listado de todos los libros.
-    """
-    # Obtiene todos los objetos de la base de datos para el modelo Libro.
     libros = Libro.objects.all()
-    # Pasa el listado de libros a la plantilla HTML.
     return render(request, 'listado_libros.html', {'libros': libros})
+
+def eliminar_libro(request, id_libro):
+    libro = get_object_or_404(Libro, id=id_libro)
+    libro.delete()
+    return redirect('listado_libros')
+
+def modificar_libro(request, id_libro):
+    libro = get_object_or_404(Libro, id=id_libro)
+    
+    if request.method == "POST":
+        formulario = FormularioCreacionLibro(request.POST, instance=libro)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('listado_libros')
+    else:
+        formulario = FormularioCreacionLibro(instance=libro)
+    
+    return render(request, 'modificar_libro.html', {'formulario': formulario})

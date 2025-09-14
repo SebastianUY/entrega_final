@@ -8,12 +8,14 @@
     {% if libros %}
         <ul>
             {% for libro in libros %}
-                <li>{{ libro.titulo }} de {{ libro.autor }} ({{ libro.fecha_publicacion }})</li>
+                <li>
+                    {{ libro.titulo }} de {{ libro.autor }} ({{ libro.fecha_publicacion }})
+                    <a href="{% url "modificar_libro" libro.id %}">Modificar</a>
+                    <a href="{% url "eliminar_libro" libro.id %}">Eliminar</a>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>No hay libros registrados aún.</p>
+        <p>No hay libros aún. ¡Sé el primero en agregar uno!</p>
     {% endif %}
-
-    <a href="{% url 'crear_libro' %}">Agregar un nuevo libro</a>
 {% endblock %}
