@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from .models import Libro
 from .forms import FormularioCreacionLibro
 
@@ -8,37 +10,38 @@ def inicio(request):
     """
     return render(request, 'inicio.html')
 
-def crear_libro(request):
-    mensaje_exito = ""
-    formulario = FormularioCreacionLibro()
-    
-    if request.method == "POST":
-        formulario = FormularioCreacionLibro(request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            mensaje_exito = "¡Has creado un nuevo libro con éxito!"
-            formulario = FormularioCreacionLibro()
+class CrearLibro(CreateView):
+    """
+    Vista basada en clase para crear un nuevo libro.
+    """
+    model = Libro
+    form_class = FormularioCreacionLibro
+    template_name = 'crear_libro.html'
+    success_url = reverse_lazy('listado_libros')
 
-    return render(request, 'crear_libro.html', {'formulario': formulario, 'mensaje_exito': mensaje_exito})
+class ListadoLibros(ListView):
+    """
+    Vista basada en clase para mostrar una lista de libros.
+    """
+    model = Libro
+    template_name = 'listado_libros.html'
+    context_object_name = 'libros'
 
-def listado_libros(request):
-    libros = Libro.objects.all()
-    return render(request, 'listado_libros.html', {'libros': libros})
+class ModificarLibro(UpdateView):
+    """
+    Vista basada en clase para modificar un libro existente.
+    """
+    model = Libro
+    form_class = FormularioCreacionLibro
+    template_name = 'modificar_libro.html'
+    success_url = reverse_lazy('listado_libros')
 
-def eliminar_libro(request, id_libro):
-    libro = get_object_or_404(Libro, id=id_libro)
-    libro.delete()
-    return redirect('listado_libros')
-
-def modificar_libro(request, id_libro):
-    libro = get_object_or_404(Libro, id=id_libro)
-    
-    if request.method == "POST":
-        formulario = FormularioCreacionLibro(request.POST, instance=libro)
-        if formulario.is_valid():
-            formulario.save()
-            return redirect('listado_libros')
-    else:
-        formulario = FormularioCreacionLibro(instance=libro)
-    
-    return render(request, 'modificar_libro.html', {'formulario': formulario})
+class EliminarLibro(DeleteView):
+    """
+    Vista basada en clase para eliminar un libro.
+    """
+    model = Libro
+    # Indica la ruta del template que se renderizará para la confirmación
+    template_name = 'libro_confirm_delete.html'
+    # Redirecciona a la URL de listado_libros después de eliminar con éxito
+    success_url = reverse_lazy('listado_libros')

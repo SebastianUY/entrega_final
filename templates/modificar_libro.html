@@ -7,7 +7,7 @@
 
     <form action="" method="POST">
         {% csrf_token %}
-        {{ formulario.as_p }}
+        {{ form.as_p }}
         <input type="submit" value="Guardar Cambios">
     </form>
 {% endblock %}

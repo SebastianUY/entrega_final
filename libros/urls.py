@@ -1,8 +1,10 @@
 from django.urls import path
-from . import views
+from .views import ListadoLibros, CrearLibro, ModificarLibro, EliminarLibro
 
 urlpatterns = [
-    # Asegúrate de que este nombre sea exactamente 'listado_libros'
-    path('crear-libro/', views.crear_libro, name='crear_libro'),
-    path('listado-libros/', views.listado_libros, name='listado_libros'),
+    # La plantilla usa 'pk', así que el patrón de URL debe usar 'pk' también.
+    path('listado-libros/', ListadoLibros.as_view(), name='listado_libros'),
+    path('crear-libro/', CrearLibro.as_view(), name='crear_libro'),
+    path('modificar-libro/<int:pk>/', ModificarLibro.as_view(), name='modificar_libro'),
+    path('eliminar-libro/<int:pk>/', EliminarLibro.as_view(), name='eliminar_libro'),
 ]
