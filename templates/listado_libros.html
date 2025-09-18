@@ -4,21 +4,21 @@
 
 {% block content %}
     <h1>Listado de libros</h1>
-    <a href="{% url 'crear_libro' %}">Añadir nuevo libro</a>
-    <br><br>
 
     {% if libros %}
         <ul>
-        {% for libro in libros %}
-            <li>
-                {{ libro.titulo }} - {{ libro.autor }}
-                <!-- Enlaces para modificar y eliminar -->
-                <a href="{% url 'modificar_libro' pk=libro.pk %}">Modificar</a>
-                <a href="{% url 'eliminar_libro' pk=libro.pk %}">Eliminar</a>
-            </li>
-        {% endfor %}
+            {% for libro in libros %}
+                <li>
+                    {% if libro.portada %}
+                        <img src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}" style="max-width: 100px; height: auto;">
+                    {% endif %}
+                    {{ libro.titulo }} de {{ libro.autor }} ({{ libro.fecha_publicacion }})
+                    <a href="{% url "modificar_libro" libro.id %}">Modificar</a>
+                    <a href="{% url "eliminar_libro" libro.id %}">Eliminar</a>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
-        <p>No hay libros registrados.</p>
+        <p>No hay libros aún. ¡Sé el primero en agregar uno!</p>
     {% endif %}
 {% endblock %}

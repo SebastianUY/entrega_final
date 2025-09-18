@@ -3,11 +3,11 @@
 {% block title %}Modificar Libro{% endblock %}
 
 {% block content %}
-    <h1>Modificar Libro</h1>
+    <h1>Modificar libro</h1>
 
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ formulario.as_p }}
         <input type="submit" value="Guardar Cambios">
     </form>
 {% endblock %}

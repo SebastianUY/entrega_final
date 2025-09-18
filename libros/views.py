@@ -1,47 +1,38 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Libro
-from .forms import FormularioCreacionLibro
+from .forms import FormularioLibro
 
-def inicio(request):
-    """
-    Vista de inicio que renderiza la plantilla de bienvenida.
-    """
-    return render(request, 'inicio.html')
-
-class CrearLibro(CreateView):
-    """
-    Vista basada en clase para crear un nuevo libro.
-    """
-    model = Libro
-    form_class = FormularioCreacionLibro
-    template_name = 'crear_libro.html'
-    success_url = reverse_lazy('listado_libros')
-
+# Vista de listado de libros
 class ListadoLibros(ListView):
-    """
-    Vista basada en clase para mostrar una lista de libros.
-    """
     model = Libro
     template_name = 'listado_libros.html'
     context_object_name = 'libros'
 
-class ModificarLibro(UpdateView):
-    """
-    Vista basada en clase para modificar un libro existente.
-    """
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not context['libros']:
+            context['mensaje'] = "No hay libros aún. ¡Sé el primero en agregar uno!"
+        return context
+
+# Vista para crear un libro
+class CrearLibro(CreateView):
     model = Libro
-    form_class = FormularioCreacionLibro
-    template_name = 'modificar_libro.html'
+    form_class = FormularioLibro
+    template_name = 'crear_libro.html'
     success_url = reverse_lazy('listado_libros')
 
-class EliminarLibro(DeleteView):
-    """
-    Vista basada en clase para eliminar un libro.
-    """
+# Vista para modificar un libro
+class ModificarLibro(UpdateView):
     model = Libro
-    # Indica la ruta del template que se renderizará para la confirmación
-    template_name = 'libro_confirm_delete.html'
-    # Redirecciona a la URL de listado_libros después de eliminar con éxito
+    form_class = FormularioLibro
+    template_name = 'modificar_libro.html'
+    success_url = reverse_lazy('listado_libros')
+    # Esta variable de contexto coincide con el nombre en tu plantilla
+    context_object_name = 'formulario'
+
+# Vista para eliminar un libro
+class EliminarLibro(DeleteView):
+    model = Libro
+    template_name = 'eliminar_libro.html'
     success_url = reverse_lazy('listado_libros')

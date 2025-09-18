@@ -16,14 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # URL para la aplicación principal sin prefijo
     path('', include('principal.urls')),
-    
-    # URL para la aplicación "libros" con un prefijo
-    # Esto evita conflictos con las URLs de la app 'principal'
     path('libros/', include('libros.urls')),
 ]
+
+# Configuración para servir archivos de la carpeta 'media' en modo de desarrollo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
