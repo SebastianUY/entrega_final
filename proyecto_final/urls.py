@@ -25,6 +25,6 @@ urlpatterns = [
     path('libros/', include('libros.urls')),
 ]
 
-# Configuración para servir archivos de la carpeta 'media' en modo de desarrollo
+# Configuración para servir archivos de media en modo de desarrollo
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

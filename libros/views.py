@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from .models import Libro
 from .forms import FormularioLibro
@@ -28,11 +28,17 @@ class ModificarLibro(UpdateView):
     form_class = FormularioLibro
     template_name = 'modificar_libro.html'
     success_url = reverse_lazy('listado_libros')
-    # Esta variable de contexto coincide con el nombre en tu plantilla
     context_object_name = 'formulario'
 
 # Vista para eliminar un libro
 class EliminarLibro(DeleteView):
     model = Libro
-    template_name = 'eliminar_libro.html'
+    template_name = 'libro_confirm_delete.html'
     success_url = reverse_lazy('listado_libros')
+
+# Vista de detalle de un libro
+class DetalleLibro(DetailView):
+    model = Libro
+    template_name = 'libro_detalle.html'
+    context_object_name = 'libro'
+
