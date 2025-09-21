@@ -40,7 +40,14 @@ INSTALLED_APPS = [
     # Mis aplicaciones
     'principal',
     'libros',
+    'usuarios',
 ]
+
+# Redirige a esta página después de iniciar sesión
+LOGIN_REDIRECT_URL = 'inicio' # Cambiado de 'home' a 'inicio'
+
+# Redirige a esta página después de cerrar sesión
+LOGOUT_REDIRECT_URL = 'inicio' # Cambiado de 'home' a 'inicio'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

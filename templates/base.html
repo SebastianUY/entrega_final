@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Proyecto Django{% endblock %}</title>
-    <!-- Aquí puedes enlazar tus archivos CSS, si los tienes -->
+    <title>{% block title %}Mi Proyecto de Libros{% endblock %}</title>
 </head>
 <body>
     <header>
         <nav>
             <a href="{% url "inicio" %}">Inicio</a>
-            <a href="{% url "crear_libro" %}">Crear libro</a>
             <a href="{% url "listado_libros" %}">Libros</a>
-            <a href="{% url "acerca_de_mi" %}">Acerca de Mí</a>
+            <a href="{% url "crear_libro" %}">Añadir Libro</a>
+            
+            <!-- Lógica de autenticación -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'perfil' %}">Perfil ({{ user.username }})</a>
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            {% else %}
+                <a href="{% url 'registro' %}">Registrarse</a>
+                <a href="{% url 'login' %}">Iniciar Sesión</a>
+            {% endif %}
         </nav>
     </header>
 
     <main>
         {% block content %}
-        <!-- El contenido específico de cada página irá aquí -->
         {% endblock %}
     </main>
 

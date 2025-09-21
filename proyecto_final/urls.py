@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('principal.urls')),
     path('libros/', include('libros.urls')),
+    path('usuarios/', include('usuarios.urls')),
 ]
 
 # Configuración para servir archivos de media en modo de desarrollo
