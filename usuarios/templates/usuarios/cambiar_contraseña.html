@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Contraseña Cambiada{% endblock %}
+
+{% block content %}
+    <h1>¡Contraseña cambiada con éxito!</h1>
+    <p>Tu contraseña ha sido actualizada. Ya puedes usarla para iniciar sesión.</p>
+    <br>
+    <a href="{% url 'perfil' %}">Volver a mi Perfil</a>
+{% endblock %}

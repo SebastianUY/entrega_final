@@ -3,34 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Proyecto de Libros{% endblock %}</title>
+    <title>{% block title %}Mi Proyecto{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin-top: 1rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 2rem;
+        }
+        .user-info {
+            float: right;
+            margin-right: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
-            <a href="{% url "inicio" %}">Inicio</a>
-            <a href="{% url "listado_libros" %}">Libros</a>
-            <a href="{% url "crear_libro" %}">Añadir Libro</a>
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="{% url 'listado_libros' %}">Libros</a>
+            <a href="{% url 'acerca_de_mi' %}">Acerca de Mí</a>
             
-            <!-- Lógica de autenticación -->
             {% if user.is_authenticated %}
-                <a href="{% url 'perfil' %}">Perfil ({{ user.username }})</a>
-                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+                <span style="color:white;">Hola, {{ user.username }}</span> | <a href="{% url 'perfil' %}" class="user-info">Mi Perfil</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer; padding:0;">Cerrar sesión</button>
+                </form>
             {% else %}
+                <a href="{% url 'login' %}">Iniciar sesión</a>
                 <a href="{% url 'registro' %}">Registrarse</a>
-                <a href="{% url 'login' %}">Iniciar Sesión</a>
             {% endif %}
         </nav>
     </header>
-
     <main>
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
-
-    <footer>
-        <p>&copy; 2024 Mi Proyecto Django</p>
-    </footer>
-
 </body>
 </html>
+

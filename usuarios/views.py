@@ -1,41 +1,39 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-# Vista de registro de usuario
+# Vista para el registro de usuarios
 def registro_usuario(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('inicio')
+        formulario = UserCreationForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('login')
     else:
-        form = UserCreationForm()
-    return render(request, 'usuarios/registro.html', {'form': form})
+        formulario = UserCreationForm()
+    return render(request, 'usuarios/registro.html', {'form': formulario})
 
-# Vista para iniciar sesión
-def iniciar_sesion(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('inicio')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'usuarios/login.html', {'form': form})
-
-# Vista para cerrar sesión
-def cerrar_sesion(request):
-    logout(request)
-    return redirect('inicio')
-
-# Vista de perfil, protegida con un decorador
+# Vista para el perfil de usuario
 @login_required
 def perfil_usuario(request):
     return render(request, 'usuarios/perfil.html')
+
+# Vista para editar el perfil de usuario
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        formulario = UserChangeForm(request.POST, instance=request.user)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('perfil')
+    else:
+        formulario = UserChangeForm(instance=request.user)
+    return render(request, 'usuarios/editar_perfil.html', {'form': formulario})
+
+# Vista para cambiar la contraseña (usando la vista genérica de Django)
+class CambiarContraseña(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'usuarios/cambiar_contraseña.html'
+    success_url = reverse_lazy('perfil')

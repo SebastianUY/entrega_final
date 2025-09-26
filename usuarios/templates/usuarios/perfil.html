@@ -1,9 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Perfil de Usuario{% endblock %}
+{% block title %}Mi Perfil{% endblock %}
 
 {% block content %}
-    <h1>Bienvenido a tu perfil, {{ user.username }}!</h1>
-    <p>Esta es una página protegida a la que solo puedes acceder si has iniciado sesión.</p>
-    <a href="{% url 'logout' %}">Cerrar Sesión</a>
+    <h1>Mi Perfil de Usuario</h1>
+    
+    {% if mensaje_exito %}
+        <p style="color: green;">{{ mensaje_exito }}</p>
+    {% endif %}
+
+    <h2>Editar mis datos</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <hr>
+    
+    <h2>Cambiar contraseña</h2>
+    <p>Para cambiar tu contraseña, haz clic en el siguiente enlace:</p>
+    <a href="{% url 'password_change' %}">Cambiar mi contraseña</a>
 {% endblock %}

@@ -18,14 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('principal.urls')),
     path('libros/', include('libros.urls')),
+    
+    # URLs de autenticación
+    path('login/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='inicio'), name='logout'),
+
+    # Se añade la nueva ruta para la aplicación 'usuarios'
     path('usuarios/', include('usuarios.urls')),
 ]
 
-# Configuración para servir archivos de media en modo de desarrollo
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
