@@ -1,11 +1,16 @@
 from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
+from django import forms
+from django.contrib.auth import get_user_model
 
-# Creamos un formulario personalizado para editar el usuario.
-class FormularioEdicionUsuario(UserChangeForm):
-    # La clase Meta le dice al formulario qué modelo usar y qué campos mostrar.
+# Obtener el modelo de usuario activo (User por defecto o el modelo personalizado)
+User = get_user_model()
+
+class CustomUserEditForm(forms.ModelForm):
+    """
+    Formulario para la edición del perfil de usuario.
+    Hereda de ModelForm y usa el modelo de usuario.
+    """
     class Meta:
         model = User
-        # Excluimos la contraseña del formulario, que se debe cambiar con un formulario separado por seguridad.
-        exclude = ['password']
+        # Lista de campos que quieres que el usuario pueda editar
         fields = ['username', 'first_name', 'last_name', 'email']

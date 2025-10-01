@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
-    <h1>Editar mi perfil</h1>
+    <h1>Editar mis datos de usuario</h1>
+    
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Guardar Cambios</button>
     </form>
-    <a href="{% url 'perfil' %}">Volver al Perfil</a>
+
+    <br>
+    <a href="{% url 'perfil' %}">Volver a Mi Perfil</a>
 {% endblock %}

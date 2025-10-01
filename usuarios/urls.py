@@ -16,11 +16,11 @@ urlpatterns = [
     path('perfil/', views.perfil_usuario, name='perfil'),
     
     # URL para la vista de edición de perfil.
-    path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
+    path('editar_perfil/', views.editar_perfil, name='editar_perfil'),
     
     # URL para cambiar la contraseña usando la vista genérica.
-    path('cambiar-contrasena/', views.CambiarContraseña.as_view(), name='password_change'),
+    path('cambiar_contrasena/', views.CambiarContraseña.as_view(), name='password_change'),
     
     # URL para el mensaje de éxito después de cambiar la contraseña.
-    path('cambiar-contrasena/done/', auth_views.PasswordChangeDoneView.as_view(template_name='usuarios/password_change_done.html'), name='password_change_done'),
+    path('cambiar_contrasena/done/', auth_views.PasswordChangeDoneView.as_view(template_name='usuarios/password_change_done.html'), name='password_change_done'),
 ]

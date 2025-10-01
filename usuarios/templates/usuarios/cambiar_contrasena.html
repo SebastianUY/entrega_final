@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Cambiar Contraseña{% endblock %}
+
+{% block content %}
+    <h1>Cambiar Contraseña</h1>
+    <p>Por favor, utiliza el formulario a continuación para actualizar tu contraseña. Necesitarás ingresar la contraseña actual.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="background-color: #ffc107; color: black; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Confirmar Cambio</button>
+    </form>
+
+    <br>
+    <a href="{% url 'perfil' %}">Volver al Perfil</a>
+{% endblock %}
