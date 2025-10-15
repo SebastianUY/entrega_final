@@ -1,40 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Proyecto{% endblock %}</title>
+    <title>{% block title %}Mi Librería Digital{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 5px;
+        }
+        /* ESTILOS GLOBALES AÑADIDOS PARA CENTRAR Y DAR ESPACIO */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f4f7f9; /* Fondo muy claro */
             color: #333;
         }
+
         header {
-            background-color: #333;
+            background-color: #1e40af; /* Azul oscuro */
             color: white;
-            padding: 1rem;
-            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         nav {
-            margin-top: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            /* Se mantiene flex-start, y usamos margin-left: auto para separar el bloque de usuario */
+            justify-content: flex-start;
         }
-        nav a {
+
+        nav a, .nav-item, nav button {
             color: white;
             text-decoration: none;
-            margin: 0 15px;
+            margin-right: 15px; /* Espacio entre los elementos de la navegación */
+            font-weight: 500;
         }
-        nav a:hover {
-            text-decoration: underline;
-        }
+        
+        /* SOLUCIÓN AL PROBLEMA DE ESPACIADO EN TODAS LAS PÁGINAS */
         main {
-            padding: 2rem;
+            max-width: 900px; /* Limita el ancho del contenido principal */
+            margin: 30px auto; /* Centra el contenido horizontalmente y añade margen superior/inferior */
+            padding: 20px; /* AÑADE ESPACIO INTERNO para que el texto no esté pegado al borde */
+            background-color: white; /* Fondo blanco para el contenido */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
-        .user-info {
-            float: right;
-            margin-right: 20px;
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #e0e0e0;
+            color: #555;
+            margin-top: 40px;
         }
     </style>
 </head>
@@ -43,13 +71,25 @@
         <nav>
             <a href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'listado_libros' %}">Libros</a>
+            <a href="{% url 'crear_libro' %}">Añadir Libro</a>
             <a href="{% url 'acerca_de_mi' %}">Acerca de Mí</a>
             
             {% if user.is_authenticated %}
-                <span style="color:white;">Hola, {{ user.username }}</span> | <a href="{% url 'perfil' %}" class="user-info">Mi Perfil</a>
+                
+                {% if user.perfil.avatar %}
+                    <!-- APLICACIÓN DE margin-left: auto AQUÍ para empujar a la derecha -->
+                    <img src="{{ user.perfil.avatar.url }}" alt="Avatar" class="avatar" style="margin-left: auto;">
+                {% else %}
+                    <!-- APLICACIÓN DE margin-left: auto AQUÍ en el ícono por defecto -->
+                    <span class="nav-item" style="margin-left: auto;">👤</span> 
+                {% endif %}
+
+                <!-- FIX: Convertido a hipervínculo que lleva a la página de perfil -->
+                <a href="{% url 'perfil' %}" class="nav-item" style="margin-right: 25px;">Hola, {{ user.username }}</a>
+                
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit" style="border:none; background:none; color:#007bff; cursor:pointer; padding:0;">Cerrar sesión</button>
+                    <button type="submit" style="border:none; background:none; color:white; cursor:pointer; padding:0;">Cerrar sesión</button>
                 </form>
             {% else %}
                 <a href="{% url 'login' %}">Iniciar sesión</a>
@@ -57,9 +97,23 @@
             {% endif %}
         </nav>
     </header>
+
+    {% comment %} Manejo de Mensajes (incluyendo los de Password Change) {% endcomment %}
+    {% if messages %}
+        <div style="max-width: 900px; margin: 10px auto; padding: 15px; border-radius: 8px; background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
+
+    <footer>
+        <p>&copy; 2024 Tu Librería Digital. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
-

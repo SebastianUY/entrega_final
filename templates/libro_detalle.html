@@ -3,19 +3,33 @@
 {% block title %}Detalle de {{ libro.titulo }}{% endblock %}
 
 {% block content %}
-    <h1>{{ libro.titulo }}</h1>
-    <p><strong>Autor:</strong> {{ libro.autor }}</p>
-    <p><strong>Fecha de Publicación:</strong> {{ libro.fecha_publicacion }}</p>
-    <p><strong>Descripción:</strong> {{ libro.descripcion }}</p>
+    <div style="display: flex; gap: 30px; align-items: flex-start; max-width: 800px; margin: 0 auto;">
+        
+        <div style="flex-shrink: 0; width: 250px;">
+            <!-- Mostrar la portada del libro -->
+            {% if libro.portada %}
+                <img src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            {% else %}
+                <div style="width: 250px; height: 350px; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #777;">
+                    Sin Portada Disponible
+                </div>
+            {% endif %}
+        </div>
 
-    {% if libro.imagen %}
-        <img src="{{ libro.imagen.url }}" alt="Portada de {{ libro.titulo }}" style="max-width: 300px; height: auto;">
-    {% else %}
-        <p>No hay imagen de portada disponible.</p>
-    {% endif %}
+        <div>
+            <h1>{{ libro.titulo }}</h1>
+            <p><strong>Autor:</strong> {{ libro.autor }}</p>
+            <p><strong>Año de Publicación:</strong> {{ libro.fecha_publicacion }}</p>
+            <p><strong>Descripción:</strong> {{ libro.descripcion }}</p>
 
-    <br><br>
-    <a href="{% url 'listado_libros' %}">Volver al listado</a>
+            <div style="margin-top: 20px;">
+                <a href="{% url 'modificar_libro' libro.pk %}" style="margin-right: 15px;">Modificar</a>
+                <a href="{% url 'eliminar_libro' libro.pk %}" style="color: red;">Eliminar</a>
+            </div>
+
+            <p style="margin-top: 30px;"><a href="{% url 'listado_libros' %}">← Volver al listado</a></p>
+        </div>
+    </div>
 {% endblock %}
 
       

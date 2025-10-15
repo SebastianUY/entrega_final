@@ -3,29 +3,34 @@
 {% block title %}Listado de Libros{% endblock %}
 
 {% block content %}
-    <h1>Listado de libros</h1>
+    <h1>Listado de Libros</h1>
     <a href="{% url 'crear_libro' %}">Añadir nuevo libro</a>
-    <br><br>
 
     {% if libros %}
-        <ul>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
         {% for libro in libros %}
-            <li>
-                <a href="{% url 'detalle_libro' pk=libro.pk %}">
-                    {% if libro.imagen %}
-                        <img src="{{ libro.imagen.url }}" alt="Portada de {{ libro.titulo }}" style="max-width: 80px; height: auto; margin-right: 10px;">
-                    {% else %}
-                        <span>[Sin imagen]</span>
-                    {% endif %}
-                    {{ libro.titulo }} - {{ libro.autor }}
-                </a>
-                <!-- Enlaces para modificar y eliminar -->
-                <a href="{% url 'modificar_libro' pk=libro.pk %}">Modificar</a>
-                <a href="{% url 'eliminar_libro' pk=libro.pk %}">Eliminar</a>
-            </li>
+            <div style="border: 1px solid #ccc; padding: 15px; width: 200px; border-radius: 8px;">
+                <!-- CORRECCIÓN CLAVE AQUÍ: Usar libro.portada.url -->
+                {% if libro.portada %}
+                    <a href="{% url 'detalle_libro' libro.pk %}">
+                        <img src="{{ libro.portada.url }}" alt="Portada de {{ libro.titulo }}" style="width: 100%; height: auto; border-radius: 4px; object-fit: cover;">
+                    </a>
+                {% else %}
+                    <div style="width: 100%; height: 150px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: #666; font-size: 0.9em;">
+                        Sin Portada
+                    </div>
+                {% endif %}
+
+                <h2 style="font-size: 1.2em; margin-top: 10px;"><a href="{% url 'detalle_libro' libro.pk %}">{{ libro.titulo }}</a></h2>
+                <p style="font-size: 0.9em; color: #555;">Autor: {{ libro.autor }}</p>
+                <div style="margin-top: 10px;">
+                    <a href="{% url 'modificar_libro' libro.pk %}" style="margin-right: 10px;">Editar</a>
+                    <a href="{% url 'eliminar_libro' libro.pk %}" style="color: red;">Eliminar</a>
+                </div>
+            </div>
         {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>No hay libros registrados.</p>
+        <p>{{ mensaje }}</p>
     {% endif %}
 {% endblock %}

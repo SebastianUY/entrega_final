@@ -3,11 +3,17 @@
 {% block title %}Crear Libro{% endblock %}
 
 {% block content %}
-    <h1>Añadir nuevo libro</h1>
-
+    <h1>Crear nuevo libro</h1>
+    
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Guardar</button>
+        <button type="submit">Guardar libro</button>
     </form>
+    
+    {% if mensaje_exito %}
+        <p style="color: green;">{{ mensaje_exito }}</p>
+    {% endif %}
+
+    <a href="{% url 'listado_libros' %}">Ver listado de libros</a>
 {% endblock %}

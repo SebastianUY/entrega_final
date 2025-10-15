@@ -1,17 +1,68 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}Editar Perfil{% endblock %}
+{% block title %}Editar Datos{% endblock %}
 
 {% block content %}
-    <h1>Editar mis datos de usuario</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar Cambios</button>
-    </form>
+    <div style="max-width: 500px; margin: 50px auto; padding: 30px; border-radius: 12px; box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); background-color: #ffffff; border: 1px solid #e0e0e0;">
+        <h2 style="text-align: center; color: #1e40af; margin-bottom: 30px; font-size: 2rem; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">
+            Modificar Perfil
+        </h2>
+        <p style="text-align: center; color: #4b5563; margin-bottom: 25px;">Actualiza tu información personal y tu foto de perfil.</p>
 
-    <br>
-    <a href="{% url 'perfil' %}">Volver a Mi Perfil</a>
+        <!-- Mensajes de Django (para mensajes de éxito) -->
+        {% if messages %}
+            <ul style="list-style: none; padding: 0;">
+                {% for message in messages %}
+                    <li style="background-color: #d1e7dd; color: #0f5132; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #badbcc; font-size: 0.9rem; font-weight: 500;">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Mensajes de error si la validación falla (se muestran los errores de ambos formularios) -->
+        {% if form.errors or avatar_form.errors %}
+            <div style="background-color: #fee2e2; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #fca5a5; font-size: 0.9rem;">
+                <p style="font-weight: bold;">¡Error al guardar! Por favor, revisa los campos.</p>
+            </div>
+        {% endif %}
+
+        <!-- CRÍTICO: enctype="multipart/form-data" para subir archivos -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin-bottom: 15px; font-size: 1.5rem; color: #374151;">1. Datos Principales</h3>
+                <!-- Dibuja el formulario de datos de usuario (User model) -->
+                {{ form.as_p }}
+            </div>
+            
+            <hr style="border: 0; height: 1px; background-color: #e0e0e0; margin: 30px 0;">
+
+            <!-- Dibuja el formulario de avatar (Perfil model) -->
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin-top: 25px; margin-bottom: 15px; font-size: 1.5rem; color: #374151;">2. Foto de Perfil (Avatar)</h3>
+                
+                <!-- Muestra el avatar actual si el objeto Perfil tiene una foto -->
+                {% if request.user.perfil.avatar %}
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="{{ request.user.perfil.avatar.url }}" alt="Avatar Actual" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #3b82f6;">
+                        <p style="font-size: 0.9rem; color: #6b7280; margin-top: 8px;">Avatar Actual</p>
+                    </div>
+                {% endif %}
+
+                <!-- El campo de carga de archivo se renderiza aquí -->
+                <!-- CRÍTICO: Muestra el formulario de avatar. Si la vista lo pasa, este campo aparece. -->
+                {{ avatar_form.as_p }}
+            </div>
+            
+            <button type="submit" style="background-color: #3b82f6; color: white; padding: 14px 25px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: 600; transition: background-color 0.3s ease; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                Guardar Todos los Cambios
+            </button>
+        </form>
+
+        <p style="margin-top: 30px; text-align: center;">
+            <a href="{% url 'perfil' %}" style="color: #6b7280; text-decoration: none; font-weight: 500; transition: color 0.2s ease;">Volver al Perfil</a>
+        </p>
+    </div>
 {% endblock %}
